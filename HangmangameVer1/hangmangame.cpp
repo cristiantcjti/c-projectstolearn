@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <cstdlib>
+#include <bits/stdc++.h> 
 
 using namespace std;
 
@@ -9,44 +10,50 @@ using namespace std;
 //Msg : Select a word.
 
 // GLOBAL VARIALBLES
-char g_level;
+int  g_level;
+int  g_word;
 char g_yesOrNo;
 
-string g_wordslevel1[3] = { "door", "car", "house" };
-string g_wordslevel2[3] = { "study", "practice", "thoughtful" };
-string g_wordslevel3[3] = { "entertainment", "householder", "thoroughfare" };
+//string g_wordslevel1[] = { "door", "car", "house" };
+//string g_wordslevel2[] = { "study", "practice", "thoughtful" };
+//string g_wordslevel3[] = { "entertainment", "householder", "thoroughfare" };
 
 
 // FUNCTIONS
-void SelectLevel();
-bool CheckChar(int _nOpc);
-bool YesOrNo();
+bool SelectLevel();
+bool CheckInput(int _nOpc);
+bool TryAgain();
+string SelectWord();
 
 // MAIN PROGRAM
 int main(){
+    string _cWord;
     cout << "Welcome to the Hangmangame!"<<endl;
     cout << "Here you can test your English spelling knowledge."<<endl;
     cout << "Are you ready?...So let's go!"<<endl;
-    SelectLevel();
+    if(SelectLevel()){
+        _cWord = SelectWord();
+    }
     return 0;
 }
 
-void SelectLevel(){
+bool SelectLevel(){
     selectLevel:
-    cout << "\nSelect a round level:[E]=Easy [M]=Medium [A]=Advanced:"<<endl;
+    bool _lRet = 0;
+    cout << "\nSelect a round level:[1]=Easy [2]=Medium [3]=Advanced: ";
     cin >>g_level;
-    if (!CheckChar(2)){ //CHECK THE ENTRY WORD, IF NOT TRUE
-        if (YesOrNo()){ // CHECK THE ENTRY ANSWER, IF TRUE
+    if (!CheckInput(2)){ //CHECK THE ENTRY WORD, IF NOT TRUE
+        if (TryAgain()){ // CHECK THE ENTRY ANSWER, IF TRUE
             goto selectLevel;
         }else{
             cout<<"\nEnd of game!";
         }
     }else{
-        //HERE
+        return _lRet=1;
     }
 }
 
-bool CheckChar(int _nOpc){
+bool CheckInput(int _nOpc){
     bool _lRet;
     switch(_nOpc){
         //YES OR NO
@@ -59,7 +66,14 @@ bool CheckChar(int _nOpc){
             break;
         //SELECTED LEVEL
         case 2:
-            if((g_level == 'e' || g_level == 'E') || (g_level == 'm' || g_level == 'M') || (g_level == 'a' || g_level == 'A') ){
+            if(g_level == 1 || g_level == 2 || g_level == 3){
+                return _lRet=1;
+            }else{
+                return _lRet=0;    
+            }
+            break;
+        case 3:
+            if(g_word == 1 || g_word == 2 || g_word == 3){
                 return _lRet=1;
             }else{
                 return _lRet=0;    
@@ -70,14 +84,43 @@ bool CheckChar(int _nOpc){
     }
 }
 
-bool YesOrNo(){
+bool TryAgain(){
     bool yOrNo;
-    cout <<"\nSorry it seems you did not insert a valid letter."<<endl;
-    cout <<"\nWould you like to try again?[Y]=Yes [N]=No:"<<endl;
+    cout <<"\nSorry it seems you did not insert a valid entry."<<endl;
+    cout <<"\nWould you like to try again?[Y]=Yes [N]=No: ";
     cin >>g_yesOrNo;
-    if (CheckChar(1)){
-        yOrNo=1;
+    if (CheckInput(1)){
+        return yOrNo=1;
     }else{
-        yOrNo=0;
+        return yOrNo=0;
     }
 }
+
+string SelectWord(){
+
+//    int wordpos = 0;
+    string g_wordslevel1[] = { "door", "car", "house" };
+    string g_wordslevel2[] = { "study", "practice", "thoughtful" };
+    string g_wordslevel3[] = { "entertainment", "householder", "thoroughfare" };
+    
+    cout <<"\nSelect a word: [0]=Word 1 [1]=Word 2 [2]=Word 3: ";
+//  cin >>wordpos;
+    cin >>g_word;
+
+    if(!CheckInput(3)){
+        if (TryAgain()){ // CHECK THE ENTRY ANSWER, IF TRUE
+            SelectWord();
+        }else{
+            cout<<"\nEnd of game!";
+        }            
+    }
+    
+    if(g_level == 1){
+        return g_wordslevel1[g_word-1];   
+    }else if(g_level == 2){
+        return g_wordslevel2[g_word-1];
+    }else{
+        return g_wordslevel3[g_word-1]; 
+    }   
+}
+
