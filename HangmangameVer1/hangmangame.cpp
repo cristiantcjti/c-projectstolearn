@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <cstdlib>
-#include <bits/stdc++.h> 
+//#include <bits/stdc++.h> 
 
 using namespace std;
 
@@ -20,16 +20,26 @@ bool SelectLevel();
 bool CheckInput(int _nOpc);
 bool TryAgain();
 string SelectWord();
+//void printWord(string *Word);
+void printWord(string *Word, int sizeWord);
 
 // MAIN PROGRAM
 int main(){
     string _cWord;
+    int sizeWord;
+    int attempts=1;
     cout << "Welcome to the Hangmangame!"<<endl;
     cout << "Here you can test your English spelling knowledge."<<endl;
     cout << "Are you ready?...So let's go!"<<endl;
     if(SelectLevel()){
         _cWord = SelectWord();
-        cout<<_cWord; // here
+        sizeWord = _cWord.size();
+        system("cls");
+        cout<<"Attempts remaining: "<<'['<<attempts<<']';
+        while(attempts>0){
+            printWord(&_cWord,sizeWord);
+            attempts--;
+        } 
     }
     return 0;
 }
@@ -53,9 +63,9 @@ bool SelectLevel(){
 
 string SelectWord(){
     g_word = 0;
-    string g_wordslevel1[] = { "door", "car", "house" };
-    string g_wordslevel2[] = { "study", "practice", "thoughtful" };
-    string g_wordslevel3[] = { "entertainment", "householder", "thoroughfare" };
+    string g_wordslevel1[3] = { "door", "car", "house" };
+    string g_wordslevel2[3] = { "study", "practice", "thoughtful" };
+    string g_wordslevel3[3] = { "entertainment", "householder", "thoroughfare" };
     cout <<"\nSelect a word: [1]=Word 1 [2]=Word 2 [3]=Word 3: ";
     cin >>g_word;
 
@@ -117,6 +127,15 @@ bool TryAgain(){
         return yOrNo=1;
     }else{
         return yOrNo=0;
+    }
+}
+
+void printWord(string *Word, int sizeWord){
+ //   string *s = Word;
+ //   int sizeWord= Word->size();
+    cout<<"\n\n";
+    for(int x=0; x<sizeWord; x++){
+        cout<<"_ "; 
     }
 }
 
