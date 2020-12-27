@@ -1,9 +1,7 @@
 #include<iostream>
 #include<string>
 #include<cstdlib>
-#include<windows.h>
-
-//#include <bits/stdc++.h> 
+#include<windows.h> 
 
 using namespace std;
 
@@ -151,7 +149,6 @@ bool CheckInput(int _nOpc){
 
 bool TryAgain(){
     bool yOrNo;
-    //g_yesOrNo;
     cout <<"\nSorry it seems you did not insert a valid entry."<<endl;
     cout <<"\nWould you like to try again?[Y]=Yes [N]=No: ";
     cin >>g_yesOrNo;
@@ -203,7 +200,6 @@ bool CheckWords(string *_aPrevRet, string *_aRet,int size,int *_nCount){
 }
 bool PlayAgain(){
     bool yOrNo;
-    //g_yesOrNo;
     cout <<"\nWould you like to play again?[Y]=Yes [N]=No: ";
     cin >>g_yesOrNo;
     if (CheckInput(1)){
