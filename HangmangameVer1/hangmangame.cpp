@@ -1,6 +1,8 @@
-#include <iostream>
-#include <string>
-#include <cstdlib>
+#include<iostream>
+#include<string>
+#include<cstdlib>
+#include<windows.h>
+
 //#include <bits/stdc++.h> 
 
 using namespace std;
@@ -8,38 +10,68 @@ using namespace std;
 // GLOBAL VARIALBLES
 int  g_level;
 int  g_word;
+char g_letter;
 char g_yesOrNo;
-
-//string g_wordslevel1[] = { "door", "car", "house" };
-//string g_wordslevel2[] = { "study", "practice", "thoughtful" };
-//string g_wordslevel3[] = { "entertainment", "householder", "thoroughfare" };
-
 
 // FUNCTIONS
 bool SelectLevel();
 bool CheckInput(int _nOpc);
 bool TryAgain();
 string SelectWord();
-//void printWord(string *Word);
-void printWord(string *Word, int sizeWord);
+void PrintWord(string *aRet,int size, int attempts);
+bool TakeWord(bool check,char *_cWordCheck, int sizeWord,string *aRet);
+bool CheckWords(string *_aPrevRet, string *_aRet,int size,int *_nCount);
+bool PlayAgain();
 
 // MAIN PROGRAM
 int main(){
+    cout << "\nWelcome to the Hangmangame!"<<endl;
+    Sleep(1000);
+    cout << "\nHere you can test your English spelling knowledge."<<endl;
+    Sleep(1000);
+    cout << "\nLet's do it?..."<<endl;
+    Sleep(1000);
+    cout<<"\nSo let's go!"<<endl;
+    Sleep(1000);
+    playagain:
     string _cWord;
+    string _aRet;
     int sizeWord;
-    int attempts=1;
-    cout << "Welcome to the Hangmangame!"<<endl;
-    cout << "Here you can test your English spelling knowledge."<<endl;
-    cout << "Are you ready?...So let's go!"<<endl;
+    int attempts=5;
     if(SelectLevel()){
         _cWord = SelectWord();
         sizeWord = _cWord.size();
+        string _aRet[sizeWord];
+        string _aPrevRet[sizeWord];
+        char _cWordCheck[sizeWord];
+        int _nCount=0;
+        strcpy(_cWordCheck, _cWord.c_str());
+        TakeWord(false,_cWordCheck,sizeWord,_aRet);
+        do{
+            PrintWord(_aRet,sizeWord,attempts);
+            copy(_aRet, _aRet+sizeWord, _aPrevRet);
+            cout<<"\nType a letter: ";
+            cin>>g_letter;
+            if (!TakeWord(true,_cWordCheck,sizeWord,_aRet)){
+                attempts--;
+            }
+            CheckWords(_aPrevRet,_aRet,sizeWord,&_nCount);
+            if(_nCount == sizeWord){
+                PrintWord(_aRet,sizeWord,attempts);
+                cout<<"\n\nYou got it. Congratulations!!!";
+                break;
+                }
+        }while(attempts>0); 
+    }
+    if(!attempts>0){
         system("cls");
-        cout<<"Attempts remaining: "<<'['<<attempts<<']';
-        while(attempts>0){
-            printWord(&_cWord,sizeWord);
-            attempts--;
-        } 
+        cout<<"\nSorry but you failed.\n";
+    }
+    if(PlayAgain()){
+        system("cls");
+        goto playagain;
+    }else{
+        cout<<"End of the game.";
     }
     return 0;
 }
@@ -119,7 +151,7 @@ bool CheckInput(int _nOpc){
 
 bool TryAgain(){
     bool yOrNo;
-    g_yesOrNo;
+    //g_yesOrNo;
     cout <<"\nSorry it seems you did not insert a valid entry."<<endl;
     cout <<"\nWould you like to try again?[Y]=Yes [N]=No: ";
     cin >>g_yesOrNo;
@@ -130,12 +162,53 @@ bool TryAgain(){
     }
 }
 
-void printWord(string *Word, int sizeWord){
- //   string *s = Word;
- //   int sizeWord= Word->size();
+bool TakeWord(bool check,char *_cWordCheck, int sizeWord, string *aRet){
+    bool lRet=0;
+    if(!check){
+        for(int x=0; x<sizeWord; x++){
+            aRet[x] = "_ ";
+        }    
+    }else{
+        for(int x=0; x<sizeWord; x++){
+            if(_cWordCheck[x] == g_letter){
+                aRet[x] = g_letter;
+                lRet=1; 
+            }else{
+                aRet[x] = "_ "; 
+            } 
+        }
+    }
+    return lRet;
+}
+
+void PrintWord(string *aRet,int size, int attempts){
+    system("cls");
+    cout<<"Attempts remaining: "<<'['<<attempts<<']';
     cout<<"\n\n";
-    for(int x=0; x<sizeWord; x++){
-        cout<<"_ "; 
+    for(int x=0; x < size; x++ ){
+        cout<<aRet[x];
     }
 }
 
+bool CheckWords(string *_aPrevRet, string *_aRet,int size,int *_nCount){
+    *_nCount=0;
+    for(int x = 0; x < size; x++){
+        if((_aPrevRet[x] != "_ ") && (_aRet[x] == "_ ")){
+            _aRet[x]=_aPrevRet[x];
+        }
+        if(_aRet[x] != "_ "){
+            *_nCount+=1;
+        }
+    }
+}
+bool PlayAgain(){
+    bool yOrNo;
+    //g_yesOrNo;
+    cout <<"\nWould you like to play again?[Y]=Yes [N]=No: ";
+    cin >>g_yesOrNo;
+    if (CheckInput(1)){
+        return yOrNo=1;
+    }else{
+        return yOrNo=0;
+    }
+}
