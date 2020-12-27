@@ -61,7 +61,7 @@ int main(){
                 cout<<"\n\nYou got it. Congratulations!!!";
                 break;
                 }
-        }while(attempts>0); 
+        }while(attempts>0);  
     }
     if(!attempts>0){
         system("cls");
