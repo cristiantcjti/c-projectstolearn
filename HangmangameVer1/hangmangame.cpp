@@ -34,10 +34,13 @@ int main(){
     playagain:
     string _cWord;
     string _aRet;
-    int sizeWord;
+    int sizeWord=0;
     int attempts=5;
     if(SelectLevel()){
         _cWord = SelectWord();
+        if(_cWord=="exit"){
+            goto finish;
+        }
         sizeWord = _cWord.size();
         string _aRet[sizeWord];
         string _aPrevRet[sizeWord];
@@ -65,6 +68,7 @@ int main(){
         system("cls");
         cout<<"\nSorry but you failed.\n";
     }
+    finish:
     if(PlayAgain()){
         system("cls");
         goto playagain;
@@ -84,7 +88,8 @@ bool SelectLevel(){
         if (TryAgain()){ // CHECK THE ENTRY ANSWER, IF TRUE
             goto selectLevel;
         }else{
-            cout<<"\nEnd of game!";
+            //cout<<"\nEnd of game!";
+            return _lRet=0;
         }
     }else{
         return _lRet=1;
@@ -103,7 +108,8 @@ string SelectWord(){
         if (TryAgain()){ // CHECK THE ENTRY ANSWER, IF TRUE
             SelectWord();
         }else{
-            cout<<"\nEnd of game!";
+            return "exit";
+            //cout<<"\nEnd of game!";
         }            
     }
 
@@ -200,7 +206,7 @@ bool CheckWords(string *_aPrevRet, string *_aRet,int size,int *_nCount){
 }
 bool PlayAgain(){
     bool yOrNo;
-    cout <<"\nWould you like to play again?[Y]=Yes [N]=No: ";
+    cout <<"\n\nWould you like to play again?[Y]=Yes [N]=No: ";
     cin >>g_yesOrNo;
     if (CheckInput(1)){
         return yOrNo=1;
